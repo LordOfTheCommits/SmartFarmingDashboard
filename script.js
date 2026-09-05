@@ -74,13 +74,17 @@ function setConnectionState(state, text) {
 // Data Fetching Logic
 async function fetchLiveGraph() {
     const btn = document.getElementById('refreshBtn');
+    const readingCount = document.getElementById('readingCount');
+    const requestedResults = Number.parseInt(readingCount.value, 10);
+    const results = Number.isFinite(requestedResults)
+        ? Math.min(8000, Math.max(1, requestedResults))
+        : 10;
+    readingCount.value = results;
     btn.hidden = false;
     btn.innerText = 'Syncing...';
     setConnectionState('loading', 'Connecting to sensors');
 
-    const url = `https://api.thingspeak.com/channels/${channelID}/feeds.json?api_key=${readAPIKey}`;
-
-//    const url = `https://api.thingspeak.com/channels/${channelID}/feeds.json?api_key=${readAPIKey}&results=15`;
+    const url = `https://api.thingspeak.com/channels/${channelID}/feeds.json?api_key=${readAPIKey}&results=${results}`;
 
     try {
         const response = await fetch(url, { signal: AbortSignal.timeout(8000) });
@@ -114,5 +118,6 @@ async function fetchLiveGraph() {
 }
 
 document.getElementById('refreshBtn').addEventListener('click', fetchLiveGraph);
+document.getElementById('readingCount').addEventListener('change', fetchLiveGraph);
 fetchLiveGraph();
 setInterval(fetchLiveGraph, 5000);

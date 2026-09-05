@@ -109,8 +109,30 @@ body {
 
 .controls {
     display: flex;
+    align-items: center;
+    gap: 12px;
     justify-content: flex-end;
     margin-bottom: 12px;
+}
+
+.reading-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: .82rem;
+    font-weight: 600;
+}
+
+.reading-control input {
+    width: 76px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    color: var(--text-main);
+    background: var(--card-bg);
+    padding: 9px 28px 9px 10px;
+    font: inherit;
+    cursor: pointer;
 }
 
 .chart-grid {

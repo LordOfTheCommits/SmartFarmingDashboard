@@ -28,6 +28,11 @@
 
     <main class="dashboard">
         <div class="controls">
+            <label class="reading-control" for="readingCount">
+                <span>Previous readings</span>
+                <input id="readingCount" type="number" min="1" max="8000" value="10"
+                    aria-label="Number of previous readings">
+            </label>
             <button id="refreshBtn" class="premium-btn">Refresh Dashboard</button>
         </div>
 
