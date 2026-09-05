@@ -126,13 +126,19 @@ body {
 
 .reading-control input {
     width: 76px;
+    min-height: 42px;
     border: 1px solid var(--border-light);
     border-radius: 8px;
     color: var(--text-main);
     background: var(--card-bg);
-    padding: 9px 28px 9px 10px;
+    padding: 9px 10px;
     font: inherit;
     cursor: pointer;
+}
+
+.reading-control input:focus {
+    outline: 3px solid rgba(47, 128, 98, .18);
+    border-color: var(--accent-green);
 }
 
 .chart-grid {
@@ -288,6 +294,26 @@ body {
 @media (max-width: 700px) {
     .dashboard {
         padding: 0 16px;
+    }
+
+    .controls {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .reading-control {
+        justify-content: space-between;
+        min-height: 42px;
+    }
+
+    .reading-control input,
+    .premium-btn {
+        min-height: 44px;
+    }
+
+    .premium-btn {
+        width: 100%;
     }
 
     .chart-grid {

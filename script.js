@@ -3,7 +3,7 @@ const readAPIKey = 'ZCNLL80EZCDMJMQ7';
 const chartInstances = {};
 const chartDefinitions = {
     moisture: { id: 'moistureChart', label: 'Soil Moisture (%)', color: '#2f8062', start: 'rgba(47, 128, 98, .24)' },
-    uv: { id: 'uvChart', label: 'UV Exposure Index', color: '#c58b3b', start: 'rgba(197, 139, 59, .24)' },
+    uv: { id: 'uvChart', label: 'Water Tank Level', color: '#c58b3b', start: 'rgba(197, 139, 59, .24)' },
     flow: { id: 'flowChart', label: 'Water Flow Rate (L/min)', color: '#438ca0', start: 'rgba(67, 140, 160, .24)' }
 };
 
