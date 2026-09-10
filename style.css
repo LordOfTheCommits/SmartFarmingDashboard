@@ -233,6 +233,35 @@ body {
     margin-top: 4px;
 }
 
+.language-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 30px;
+    padding: 0 8px;
+    color: var(--text-main);
+    background: #f1f6f0;
+    border: 1px solid var(--border-light);
+    border-radius: 7px;
+    cursor: pointer;
+    font: inherit;
+    font-size: .68rem;
+    font-weight: 700;
+    transition: background .2s ease, border-color .2s ease;
+}
+
+.language-toggle:hover,
+.language-toggle:focus-visible {
+    background: #e3eee3;
+    border-color: #c6dcc8;
+    outline: none;
+}
+
+.language-icon {
+    color: var(--accent-green);
+    font-size: .82rem;
+}
+
 .metric-unit {
     color: var(--text-muted);
     font-size: .75rem;
@@ -678,6 +707,10 @@ body {
 }
 
 @media (max-width: 700px) {
+    .language-toggle {
+        align-self: flex-end;
+    }
+
     .dashboard {
         padding: 0 16px;
     }

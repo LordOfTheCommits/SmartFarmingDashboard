@@ -22,7 +22,8 @@
                 <span class="pulse-dot"></span><span id="statusText">Connecting to sensors</span>
             </div>
             <h1>KisaanEdge</h1>
-            <p>AI-Powered Field Advisory System for Crop Health, Nutrient & Water Management</p>
+            <p data-i18n="heroDescription">AI-Powered Field Advisory System for Crop Health, Nutrient & Water Management
+            </p>
         </div>
     </header>
 
@@ -31,22 +32,29 @@
             <label class="reading-control" for="readingCount">
                 <span>Previous readings</span>
                 <input id="readingCount" type="number" min="1" max="8000" value="10"
-                    aria-label="Number of previous readings">
+                    data-i18n-attr="aria-label:numberOfReadings" aria-label="Number of previous readings">
             </label>
-            <button id="refreshBtn" class="premium-btn">Refresh Dashboard</button>
+            <button id="refreshBtn" class="premium-btn" data-i18n="refreshDashboard">Refresh Dashboard</button>
+            <button id="languageToggle" class="language-toggle" type="button" aria-pressed="false"
+                aria-label="Switch language to Hindi">
+                <span class="language-icon" aria-hidden="true">文</span>
+                <span id="languageToggleLabel">हिंदी</span>
+            </button>
         </div>
 
         <section class="chart-grid" aria-label="Sensor analytics">
             <article class="card chart-card">
                 <div class="card-heading">
                     <div>
-                        <p class="eyebrow">Field sensor 01</p>
-                        <h2>Soil moisture</h2>
+                        <p class="eyebrow" data-i18n="fieldSensor1">Field sensor 01</p>
+                        <h2 data-i18n="soilMoisture">Soil moisture</h2>
                     </div><span class="metric-unit">%</span>
                 </div>
                 <div class="chart-container">
-                    <div class="empty-state"><span class="empty-icon">~</span><strong>Waiting for sensor
-                            data...</strong><span>Moisture readings will appear here.</span></div>
+                    <div class="empty-state"><span class="empty-icon">~</span><strong data-i18n="waitingForData">Waiting
+                            for sensor
+                            data...</strong><span data-i18n="moistureReadings">Moisture readings will appear
+                            here.</span></div>
                     <canvas id="moistureChart"></canvas>
                 </div>
             </article>
@@ -54,27 +62,30 @@
             <article class="card chart-card">
                 <div class="card-heading">
                     <div>
-                        <p class="eyebrow">Field sensor 2</p>
-                        <h2>Water tank level</h2>
+                        <p class="eyebrow" data-i18n="fieldSensor2">Field sensor 2</p>
+                        <h2 data-i18n="tankLevel">Water tank level</h2>
                     </div><span class="metric-unit">%</span>
                 </div>
                 <div class="chart-container">
-                    <div class="empty-state"><span class="empty-icon">~</span><strong>Waiting for sensor
-                            data...</strong><span>Tank level readings will appear here.</span></div>
-                    <canvas id="uvChart"></canvas>
+                    <div class="empty-state"><span class="empty-icon">~</span><strong data-i18n="waitingForData">Waiting
+                            for sensor
+                            data...</strong><span data-i18n="tankReadings">Tank level readings will appear here.</span>
+                    </div>
+                    <canvas id="tankLevelChart"></canvas>
                 </div>
             </article>
 
             <article class="card chart-card">
                 <div class="card-heading">
                     <div>
-                        <p class="eyebrow">Field sensor 3</p>
-                        <h2>Water flow</h2>
+                        <p class="eyebrow" data-i18n="fieldSensor3">Field sensor 3</p>
+                        <h2 data-i18n="waterFlow">Water flow</h2>
                     </div><span class="metric-unit">L/min</span>
                 </div>
                 <div class="chart-container">
-                    <div class="empty-state"><span class="empty-icon">~</span><strong>Waiting for sensor
-                            data...</strong><span>Flow readings will appear here.</span></div>
+                    <div class="empty-state"><span class="empty-icon">~</span><strong data-i18n="waitingForData">Waiting
+                            for sensor
+                            data...</strong><span data-i18n="flowReadings">Flow readings will appear here.</span></div>
                     <canvas id="flowChart"></canvas>
                 </div>
             </article>
@@ -83,34 +94,38 @@
         <section class="assistant-panel" aria-labelledby="assistant-title">
             <div class="assistant-heading">
                 <div>
-                    <p class="eyebrow">Fieldwise intelligence</p>
+                    <p class="eyebrow" data-i18n="fieldwiseIntelligence">Fieldwise intelligence</p>
                     <h2 id="assistant-title">KisaanEdge AI</h2>
-                    <p>Ask about crops, soil, weather, or plant health.</p>
+                    <p data-i18n="assistantDescription">Ask about crops, soil, weather, or plant health.</p>
                 </div>
                 <div class="assistant-actions">
-                    <button id="sensor-suggestion" class="sensor-suggestion" type="button"
+                    <button id="sensor-suggestion" class="sensor-suggestion" type="button" data-i18n="sensorAdvice"
+                        data-i18n-attr="title:sensorAdviceTitle"
                         title="Ask for advice using the latest sensor readings">Sensor advice</button>
                     <button id="close-assistant" class="assistant-close" type="button"
-                        aria-label="Close farming assistant">&times;</button>
+                        data-i18n-attr="aria-label:closeAssistant" aria-label="Close farming assistant">&times;</button>
                 </div>
             </div>
 
-            <div id="message-history" class="message-history" aria-live="polite" aria-label="Assistant conversation">
+            <div id="message-history" class="message-history" aria-live="polite"
+                data-i18n-attr="aria-label:assistantConversation" aria-label="Assistant conversation">
             </div>
 
             <form id="composer" class="composer">
                 <div id="attachment-preview" class="attachment-preview" aria-label="Selected image preview">
                     <img id="attachment-thumbnail" src="" alt="Selected plant image">
                     <button id="remove-attachment" class="remove-attachment" type="button"
-                        aria-label="Remove attached image">&times;</button>
+                        data-i18n-attr="aria-label:removeAttachment" aria-label="Remove attached image">&times;</button>
                 </div>
                 <div class="input-bar">
-                    <label class="icon-button" for="image-input" title="Attach an image"
+                    <label class="icon-button" for="image-input"
+                        data-i18n-attr="title:attachImage,aria-label:attachImage" title="Attach an image"
                         aria-label="Attach an image">&#128206;</label>
                     <input id="image-input" class="sr-only" type="file" accept="image/*">
-                    <input id="message-input" type="text" placeholder="Ask a question about your farm..."
-                        autocomplete="off" aria-label="Message">
-                    <button id="send-button" class="send-button" type="submit">Send</button>
+                    <input id="message-input" type="text"
+                        data-i18n-attr="placeholder:messagePlaceholder,aria-label:message"
+                        placeholder="Ask a question about your farm..." autocomplete="off" aria-label="Message">
+                    <button id="send-button" class="send-button" type="submit" data-i18n="send">Send</button>
                 </div>
             </form>
         </section>
@@ -122,15 +137,15 @@
                 <span class="footer-mark" aria-hidden="true">K</span>
                 <div>
                     <strong>KisaanEdge</strong>
-                    <span>Smarter decisions for healthier fields.</span>
+                    <span data-i18n="footerTagline">Smarter decisions for healthier fields.</span>
                 </div>
             </div>
-            <p class="footer-copy">&copy; 2026 KisaanEdge. All rights reserved.</p>
+            <p class="footer-copy" data-i18n="rightsReserved">&copy; 2026 KisaanEdge. All rights reserved.</p>
         </div>
     </footer>
 
-    <button id="open-assistant" class="assistant-launcher" type="button" aria-label="Open farming assistant"
-        aria-expanded="false">
+    <button id="open-assistant" class="assistant-launcher" type="button" data-i18n-attr="aria-label:openAssistant"
+        aria-label="Open farming assistant" aria-expanded="false">
         <span class="launcher-label">KisaanEdge AI</span>
     </button>
 

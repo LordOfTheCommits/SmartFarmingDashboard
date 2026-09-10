@@ -1,12 +1,133 @@
 const channelID = '3481475';
 const readAPIKey = 'ZCNLL80EZCDMJMQ7';
+const translations = {
+    en: {
+        languageName: 'हिंदी',
+        switchLanguage: 'Switch language to Hindi',
+        heroDescription: 'AI-Powered Field Advisory System for Crop Health, Nutrient & Water Management',
+        previousReadings: 'Previous readings',
+        numberOfReadings: 'Number of previous readings',
+        refreshDashboard: 'Refresh Dashboard',
+        syncing: 'Syncing...',
+        retryConnection: 'Retry Connection',
+        fieldSensor1: 'Field sensor 01',
+        fieldSensor2: 'Field sensor 2',
+        fieldSensor3: 'Field sensor 3',
+        soilMoisture: 'Soil moisture',
+        tankLevel: 'Water tank level',
+        waterFlow: 'Water flow',
+        waitingForData: 'Waiting for sensor data...',
+        moistureReadings: 'Moisture readings will appear here.',
+        tankReadings: 'Tank level readings will appear here.',
+        flowReadings: 'Flow readings will appear here.',
+        sensorAnalytics: 'Sensor analytics',
+        fieldwiseIntelligence: 'Fieldwise intelligence',
+        assistantDescription: 'Ask about crops, soil, weather, or plant health.',
+        sensorAdvice: 'Sensor advice',
+        sensorAdviceTitle: 'Ask for advice using the latest sensor readings',
+        closeAssistant: 'Close farming assistant',
+        assistantConversation: 'Assistant conversation',
+        selectedImagePreview: 'Selected image preview',
+        selectedPlantImage: 'Selected plant image',
+        removeAttachment: 'Remove attached image',
+        attachImage: 'Attach an image',
+        messagePlaceholder: 'Ask a question about your farm...',
+        message: 'Message',
+        send: 'Send',
+        openAssistant: 'Open farming assistant',
+        footerTagline: 'Smarter decisions for healthier fields.',
+        rightsReserved: '© 2026 KisaanEdge. All rights reserved.',
+        typing: 'AI is typing',
+        connecting: 'Connecting to sensors',
+        liveData: 'Live Data Feed',
+        unavailable: 'Connection unavailable',
+        welcome: 'Hello! I am your KisaanEdge AI Farming assistant. Ask me about your crops, or attach a plant image and I will help you assess its health.',
+        sensorUnavailable: 'I do not have a sensor reading yet. Refresh the dashboard and try again.'
+    },
+    hi: {
+        languageName: 'English',
+        switchLanguage: 'अंग्रेज़ी में बदलें',
+        heroDescription: 'फसल स्वास्थ्य, पोषक तत्व और जल प्रबंधन के लिए AI-संचालित खेत सलाह प्रणाली',
+        previousReadings: 'पिछली रीडिंग',
+        numberOfReadings: 'पिछली रीडिंग की संख्या',
+        refreshDashboard: 'डैशबोर्ड रीफ़्रेश करें',
+        syncing: 'सिंक हो रहा है...',
+        retryConnection: 'कनेक्शन फिर से आज़माएं',
+        fieldSensor1: 'फील्ड सेंसर 01',
+        fieldSensor2: 'फील्ड सेंसर 2',
+        fieldSensor3: 'फील्ड सेंसर 3',
+        soilMoisture: 'मिट्टी की नमी',
+        tankLevel: 'पानी की टंकी का स्तर',
+        waterFlow: 'पानी का प्रवाह',
+        waitingForData: 'सेंसर डेटा की प्रतीक्षा हो रही है...',
+        moistureReadings: 'नमी की रीडिंग यहां दिखाई देगी।',
+        tankReadings: 'टंकी के स्तर की रीडिंग यहां दिखाई देगी।',
+        flowReadings: 'प्रवाह की रीडिंग यहां दिखाई देगी।',
+        sensorAnalytics: 'सेंसर विश्लेषण',
+        fieldwiseIntelligence: 'खेत संबंधी बुद्धिमत्ता',
+        assistantDescription: 'फसल, मिट्टी, मौसम या पौधों के स्वास्थ्य के बारे में पूछें।',
+        sensorAdvice: 'सेंसर सलाह',
+        sensorAdviceTitle: 'नवीनतम सेंसर रीडिंग के आधार पर सलाह पूछें',
+        closeAssistant: 'फार्मिंग असिस्टेंट बंद करें',
+        assistantConversation: 'असिस्टेंट बातचीत',
+        selectedImagePreview: 'चयनित छवि का प्रीव्यू',
+        selectedPlantImage: 'चयनित पौधे की छवि',
+        removeAttachment: 'संलग्न छवि हटाएं',
+        attachImage: 'छवि संलग्न करें',
+        messagePlaceholder: 'अपने खेत के बारे में सवाल पूछें...',
+        message: 'संदेश',
+        send: 'भेजें',
+        openAssistant: 'फार्मिंग असिस्टेंट खोलें',
+        footerTagline: 'स्वस्थ खेतों के लिए बेहतर निर्णय।',
+        rightsReserved: '© 2026 KisaanEdge. सर्वाधिकार सुरक्षित।',
+        typing: 'AI लिख रहा है',
+        connecting: 'सेंसर से कनेक्ट हो रहा है',
+        liveData: 'लाइव डेटा फीड',
+        unavailable: 'कनेक्शन उपलब्ध नहीं है',
+        welcome: 'नमस्ते! मैं आपका KisaanEdge AI फार्मिंग असिस्टेंट हूं। अपनी फसल के बारे में पूछें या पौधे की तस्वीर भेजें, मैं उसके स्वास्थ्य का आकलन करने में मदद करूंगा।',
+        sensorUnavailable: 'अभी सेंसर रीडिंग उपलब्ध नहीं है। डैशबोर्ड रीफ़्रेश करके फिर प्रयास करें।'
+    }
+};
+let currentLanguage = localStorage.getItem('kisaanEdgeLanguage') || 'en';
 const chartInstances = {};
 const latestSensorReadings = { moisture: null, tankLevel: null, flow: null, timestamp: null };
 const chartDefinitions = {
-    moisture: { id: 'moistureChart', label: 'Soil Moisture (%)', color: '#2f8062', start: 'rgba(47, 128, 98, .24)' },
-    uv: { id: 'uvChart', label: 'Water Tank Level (%)', color: '#c58b3b', start: 'rgba(197, 139, 59, .24)' },
-    flow: { id: 'flowChart', label: 'Water Flow Rate (L/min)', color: '#438ca0', start: 'rgba(67, 140, 160, .24)' }
+    moisture: { id: 'moistureChart', labelKey: 'soilMoisture', unit: '%', color: '#2f8062', start: 'rgba(47, 128, 98, .24)' },
+    uv: { id: 'tankLevelChart', labelKey: 'tankLevel', unit: '%', color: '#c58b3b', start: 'rgba(197, 139, 59, .24)' },
+    flow: { id: 'flowChart', labelKey: 'waterFlow', unit: 'L/min', color: '#438ca0', start: 'rgba(67, 140, 160, .24)' }
 };
+
+function translate(key) {
+    return translations[currentLanguage][key] || translations.en[key] || key;
+}
+
+function applyLanguage() {
+    document.documentElement.lang = currentLanguage;
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        element.textContent = translate(element.dataset.i18n);
+    });
+    document.querySelectorAll('[data-i18n-attr]').forEach(element => {
+        element.dataset.i18nAttr.split(',').forEach(attributePair => {
+            const [attribute, key] = attributePair.split(':');
+            element.setAttribute(attribute, translate(key));
+        });
+    });
+    document.getElementById('languageToggleLabel').textContent = translate('languageName');
+    document.getElementById('languageToggle').setAttribute('aria-label', translate('switchLanguage'));
+    document.getElementById('languageToggle').setAttribute('aria-pressed', String(currentLanguage === 'hi'));
+    document.getElementById('statusText').textContent = translate('connecting');
+    Object.entries(chartInstances).forEach(([key, chart]) => {
+        const definition = chartDefinitions[key];
+        chart.data.datasets[0].label = `${translate(definition.labelKey)} (${definition.unit})`;
+        chart.update();
+    });
+}
+
+document.getElementById('languageToggle').addEventListener('click', () => {
+    currentLanguage = currentLanguage === 'en' ? 'hi' : 'en';
+    localStorage.setItem('kisaanEdgeLanguage', currentLanguage);
+    applyLanguage();
+});
 
 // Global Typography Settings
 Chart.defaults.font.family = "'Inter', sans-serif";
@@ -63,13 +184,14 @@ function createChart(key, labels, values) {
     const definition = chartDefinitions[key];
     const canvas = document.getElementById(definition.id);
     const context = canvas.getContext('2d');
-    chartInstances[key] = new Chart(context, { type: 'line', data: { labels, datasets: [{ label: definition.label, data: values, borderColor: definition.color, backgroundColor: createGradient(context, definition.start, 'rgba(255,255,255,0)'), borderWidth: 3, fill: true, tension: .4, pointBackgroundColor: '#fff', pointBorderColor: definition.color }] }, options: commonOptions });
+    chartInstances[key] = new Chart(context, { type: 'line', data: { labels, datasets: [{ label: `${translate(definition.labelKey)} (${definition.unit})`, data: values, borderColor: definition.color, backgroundColor: createGradient(context, definition.start, 'rgba(255,255,255,0)'), borderWidth: 3, fill: true, tension: .4, pointBackgroundColor: '#fff', pointBorderColor: definition.color }] }, options: commonOptions });
     canvas.parentElement.classList.add('has-data');
 }
 
 function setConnectionState(state, text) {
     document.getElementById('statusBadge').className = `status-badge status-${state}`;
-    document.getElementById('statusText').textContent = text;
+    const statusKey = { loading: 'connecting', connected: 'liveData', error: 'unavailable' }[state];
+    document.getElementById('statusText').textContent = translate(statusKey) || text;
 }
 
 // Data Fetching Logic
@@ -81,9 +203,8 @@ async function fetchLiveGraph() {
         ? Math.min(8000, Math.max(1, requestedResults))
         : 10;
     readingCount.value = results;
-    btn.hidden = false;
-    btn.innerText = 'Syncing...';
-    setConnectionState('loading', 'Connecting to sensors');
+    btn.innerText = translate('syncing');
+    setConnectionState('loading', translate('connecting'));
 
     const url = `https://api.thingspeak.com/channels/${channelID}/feeds.json?api_key=${readAPIKey}&results=${results}`;
 
@@ -94,7 +215,7 @@ async function fetchLiveGraph() {
         console.log("API Response:===============", data);
         const feeds = (data.feeds || []).filter(feed => ['field1', 'field2', 'field3'].some(field => Number.isFinite(Number(feed[field]))));
         if (feeds.length === 0) {
-            setConnectionState('connected', 'Live Data Feed');
+            setConnectionState('connected', translate('liveData'));
             btn.hidden = true;
             return;
         }
@@ -114,16 +235,15 @@ async function fetchLiveGraph() {
             if (!chartInstances[key]) createChart(key, timeLabels, values);
             else { chartInstances[key].data.labels = timeLabels; chartInstances[key].data.datasets[0].data = values; chartInstances[key].update(); }
         });
-        setConnectionState('connected', 'Live Data Feed');
-        setTimeout(() => btn.innerText = 'Refresh Dashboard', 600);
+        setConnectionState('connected', translate('liveData'));
+        setTimeout(() => btn.innerText = translate('refreshDashboard'), 600);
     } catch (error) {
         console.error("API Error:", error);
-        setConnectionState('error', 'Connection unavailable');
-        btn.innerText = 'Retry Connection';
+        setConnectionState('error', translate('unavailable'));
+        btn.innerText = translate('retryConnection');
     }
 }
 
-document.getElementById('refreshBtn').addEventListener('click', fetchLiveGraph);
 document.getElementById('readingCount').addEventListener('change', fetchLiveGraph);
 fetchLiveGraph();
 setInterval(fetchLiveGraph, 5000);
@@ -175,7 +295,8 @@ closeAssistantButton.addEventListener('click', () => {
     openAssistantButton.setAttribute('aria-expanded', 'false');
 });
 
-renderMessage('ai', 'Hello! I am your KisaanEdge AI Farming assistant. Ask me about your crops, or attach a plant image and I will help you assess its health.');
+applyLanguage();
+renderMessage('ai', translate('welcome'));
 
 imageInput.addEventListener('change', () => {
     const image = imageInput.files[0];
@@ -222,7 +343,14 @@ async function handleSend(event) {
         const response = await fetch(API_ENDPOINT, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] }, contents: chatHistory })
+            body: JSON.stringify({
+                systemInstruction: {
+                    parts: [{
+                        text: `${SYSTEM_INSTRUCTION}\n\nReply in ${currentLanguage === 'hi' ? 'Hindi' : 'English'} unless the user explicitly asks for another language.`
+                    }]
+                },
+                contents: chatHistory
+            })
         });
         if (!response.ok) throw new Error(`The assistant request failed (${response.status}).`);
         const data = await response.json();
@@ -255,7 +383,7 @@ function renderMessage(role, text, imageUrl, isHtml = false) {
         const image = document.createElement('img');
         image.className = 'message-image';
         image.src = imageUrl;
-        image.alt = 'Attached plant image';
+        image.alt = translate('selectedPlantImage');
         bubble.append(image);
     }
     if (text) {
@@ -272,7 +400,7 @@ function renderMessage(role, text, imageUrl, isHtml = false) {
 function renderTypingIndicator() {
     const message = document.createElement('article');
     message.className = 'message ai';
-    message.innerHTML = '<div class="message-content"><div class="message-bubble typing-dots" aria-label="AI is typing"><span></span><span></span><span></span></div></div>';
+    message.innerHTML = `<div class="message-content"><div class="message-bubble typing-dots" aria-label="${translate('typing')}"><span></span><span></span><span></span></div></div>`;
     messageHistory.append(message);
     scrollToLatest();
     return message;
@@ -314,7 +442,7 @@ function readImageAsDataUrl(image) {
 function requestSensorSuggestion() {
     const { moisture, tankLevel, flow, timestamp } = latestSensorReadings;
     if (![moisture, tankLevel, flow].some(Number.isFinite)) {
-        renderMessage('ai', 'I do not have a sensor reading yet. Refresh the dashboard and try again.');
+        renderMessage('ai', translate('sensorUnavailable'));
         return;
     }
 
