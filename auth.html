@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in | Kisaan Edge</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="auth.css">
+    <script defer crossorigin="anonymous"
+        src="https://credible-polliwog-1071.clerk.accounts.dev/npm/@clerk/ui@1/dist/ui.browser.js"></script>
+    <script defer crossorigin="anonymous"
+        data-clerk-publishable-key="pk_test_Y3JlZGlibGUtcG9sbGl3b2ctMTA3MS5jbGVyay5hY2NvdW50cy5kZXYk"
+        src="https://credible-polliwog-1071.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js"></script>
+</head>
+
+<body>
+    <main class="auth-shell">
+        <a class="auth-brand" href="index.html" aria-label="Return to Kisaan Edge dashboard">
+            <span class="brand-mark">K</span>
+            <span>Kisaan Edge</span>
+        </a>
+        <section class="auth-layout" aria-labelledby="auth-title">
+            <div class="auth-intro">
+                <p class="eyebrow">Kisaan Edge, together</p>
+                <h1 id="auth-title">Your fields, one clear view.</h1>
+                <p>Sign in to keep your sensor readings and field decisions close at hand.</p>
+                <div class="field-note" aria-label="Kisaan Edge platform highlights">
+                    <span class="field-note-mark" aria-hidden="true">+</span>
+                    <div>
+                        <strong>From soil to sky</strong>
+                        <span>One calmer way to care for every field.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="auth-card">
+                <div id="auth-mount" aria-live="polite">
+                    <p class="auth-status">Loading secure sign-in...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="auth.js"></script>
+</body>
+
+</html>

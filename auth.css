@@ -1,0 +1,226 @@
+:root {
+    --ink: #18352b;
+    --muted: #708178;
+    --green: #2f8062;
+    --green-dark: #1e5d47;
+    --leaf: #b9d8b6;
+    --line: #dce8dd;
+    --paper: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    color: var(--ink);
+    background: #edf4ec;
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+    position: fixed;
+    inset: 0 48% 0 0;
+    z-index: -1;
+    background: linear-gradient(135deg, rgba(19, 60, 42, .96), rgba(42, 102, 76, .86)), url('https://images.unsplash.com/photo-1500076656116-558758c991c1?auto=format&fit=crop&w=1400&q=85') center / cover;
+    content: '';
+    clip-path: polygon(0 0, 100% 0, 86% 100%, 0 100%);
+}
+
+.auth-shell {
+    width: min(1240px, calc(100% - 64px));
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 30px 0;
+}
+
+.auth-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #f5fff5;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.brand-mark {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    color: var(--green-dark);
+    background: #d6ebce;
+    border-radius: 10px;
+}
+
+.auth-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(380px, 460px);
+    align-items: center;
+    gap: clamp(48px, 8vw, 132px);
+    min-height: calc(100vh - 90px);
+    padding: 40px clamp(24px, 6vw, 92px);
+}
+
+.auth-intro {
+    max-width: 460px;
+}
+
+.eyebrow {
+    color: var(--leaf);
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.auth-intro h1 {
+    margin: 12px 0 18px;
+    color: #f7fff7;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4.6rem);
+    line-height: .98;
+    letter-spacing: 0;
+}
+
+.auth-intro p:not(.eyebrow) {
+    max-width: 390px;
+    color: #d7e8d8;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.field-note {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 330px;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(220, 241, 220, .28);
+}
+
+.field-note-mark {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 auto;
+    place-items: center;
+    color: var(--green-dark);
+    background: var(--leaf);
+    border-radius: 50%;
+    font-size: 1.35rem;
+}
+
+.field-note div {
+    display: grid;
+    gap: 2px;
+}
+
+.field-note strong {
+    color: #f3fff3;
+    font-size: .84rem;
+}
+
+.field-note span:last-child {
+    color: #bdd6bf;
+    font-size: .73rem;
+}
+
+.back-link {
+    display: inline-flex;
+    margin-top: 24px;
+    color: #e0f2dc;
+    font-size: .84rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+    color: #ffffff;
+}
+
+.auth-card {
+    min-height: 500px;
+    padding: 30px 28px;
+    overflow: visible;
+    background: var(--paper);
+    border: 1px solid rgba(220, 232, 221, .9);
+    border-radius: 16px;
+    box-shadow: 0 24px 70px rgba(18, 48, 33, .22), 0 2px 8px rgba(18, 48, 33, .06);
+}
+
+.auth-mode-sign-up .auth-layout {
+    align-items: start;
+    padding-top: 76px;
+}
+
+.auth-mode-sign-up .auth-card {
+    min-height: 0;
+    padding-top: 26px;
+    padding-bottom: 26px;
+}
+
+.auth-status {
+    margin: 0;
+    color: var(--muted);
+    font-size: .9rem;
+    text-align: center;
+}
+
+.auth-error {
+    color: #a34c43;
+}
+
+@media (max-width: 760px) {
+    body::before {
+        inset: 0 0 62% 0;
+        clip-path: none;
+    }
+
+    .auth-shell {
+        width: min(100% - 32px, 560px);
+        padding-top: 20px;
+    }
+
+    .auth-layout {
+        display: block;
+        min-height: auto;
+        padding: 54px 0 24px;
+    }
+
+    .auth-intro {
+        margin-bottom: 30px;
+    }
+
+    .auth-intro h1 {
+        font-size: clamp(2.4rem, 12vw, 3.6rem);
+    }
+
+    .field-note {
+        margin-top: 24px;
+    }
+
+    .auth-card {
+        min-height: 460px;
+        padding: 18px 14px;
+    }
+
+    .auth-mode-sign-up .auth-layout {
+        padding-top: 42px;
+    }
+
+    .auth-mode-sign-up .auth-card {
+        min-height: 0;
+        padding-top: 18px;
+        padding-bottom: 18px;
+    }
+}
