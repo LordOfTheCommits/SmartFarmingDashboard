@@ -16,8 +16,7 @@ window.addEventListener('load', async () => {
     try {
         await window.Clerk.load({ ui: { ClerkUI: window.__internal_ClerkUICtor } });
 
-        // BULLETPROOF ROUTING: Automatically detects your exact live or local link
-        // It takes your current URL, removes "auth.html", and replaces it with "index.html"
+        // Grab the exact URL path you are on right now
         const dashboardUrl = window.location.href.split('auth.html')[0] + 'index.html';
 
         if (window.Clerk.user) {
@@ -29,8 +28,12 @@ window.addEventListener('load', async () => {
 
         const options = {
             routing: 'hash',
+            // Aggressive Redirects: Forces Clerk's backend to respect your GitHub Pages folder
             fallbackRedirectUrl: dashboardUrl,
             forceRedirectUrl: dashboardUrl,
+            afterSignUpUrl: dashboardUrl,
+            afterSignInUrl: dashboardUrl,
+            redirectUrl: dashboardUrl,
             appearance: {
                 variables: {
                     colorPrimary: '#2f8062',
