@@ -40,6 +40,10 @@
                 <span class="language-icon" aria-hidden="true">文</span>
                 <span id="languageToggleLabel">हिंदी</span>
             </button>
+            <!-- ADDED: The container for the User Profile Picture & Logout button -->
+            <div id="auth-controls" class="auth-controls" aria-label="Account controls">
+                <span class="auth-loading" style="margin-left: 15px; font-size: 14px; color: #708178;">Loading account...</span>
+            </div>
         </div>
 
         <section class="chart-grid" aria-label="Sensor analytics">
@@ -148,6 +152,35 @@
         aria-label="Open farming assistant" aria-expanded="false">
         <span class="launcher-label">KisaanEdge AI</span>
     </button>
+
+    <!-- ADDED: Clerk Core Scripts -->
+    <script defer crossorigin="anonymous"
+        src="https://credible-polliwog-1071.clerk.accounts.dev/npm/@clerk/ui@1/dist/ui.browser.js"></script>
+    <script defer crossorigin="anonymous"
+        data-clerk-publishable-key="pk_test_Y3JlZGlibGUtcG9sbGl3b2ctMTA3MS5jbGVyay5hY2NvdW50cy5kZXYk"
+        src="https://credible-polliwog-1071.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js"></script>
+
+    <!-- ADDED: Authentication & Protection Handler with Smart Routing -->
+    <script>
+        window.addEventListener('load', async () => {
+            if (!window.Clerk) return;
+            await window.Clerk.load();
+
+            if (!window.Clerk.user) {
+                // Not signed in: smart routing to login
+                const isGitHubPages = window.location.hostname.includes('github.io');
+                const authUrl = isGitHubPages ? '/SmartFarmingDashboard/auth.html' : 'auth.html';
+                window.location.replace(authUrl);
+            } else {
+                // Signed in: mount profile/logout button
+                const authControls = document.getElementById('auth-controls');
+                if (authControls) {
+                    authControls.innerHTML = '';
+                    window.Clerk.mountUserButton(authControls);
+                }
+            }
+        });
+    </script>
 
     <script src="script.js"></script>
 </body>
