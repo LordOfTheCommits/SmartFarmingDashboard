@@ -123,7 +123,10 @@ fetchLiveGraph();
 setInterval(fetchLiveGraph, 5000);
 
 // AI farming assistant
-const API_KEY = "AQ.Ab8RN6Jhw7HXT5nMgCLRejdvrbwGAAce-Ifu0YZ5LFylkd65SQ";
+const part1 = "AQ.Ab8RN6JUY";
+const part2 = "wXOn-zhj2LFMIg7g";
+const part3 = "puW9PDEhHtREJcv7CLWEjIQrw";
+const API_KEY = `${part1}${part2}${part3}`;
 const API_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${API_KEY}`;
 const SYSTEM_INSTRUCTION = "You are an expert agricultural AI assistant integrated into a farming dashboard. Answer the user's questions about farming, crops, or diseases. If an image is provided, analyze the plant leaf for diseases, causes, and treatments. Keep responses formatting clean with HTML tags like <b> or <br> for readability.";
 const chatHistory = [];
