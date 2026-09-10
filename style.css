@@ -320,17 +320,6 @@ body {
     font-size: .78rem;
 }
 
-.assistant-mark {
-    display: grid;
-    width: 34px;
-    height: 34px;
-    place-items: center;
-    color: #fff;
-    background: var(--accent-green);
-    border-radius: 9px;
-    box-shadow: 0 8px 16px rgba(47, 128, 98, .2);
-}
-
 .message-history {
     flex: 1;
     min-height: 120px;
@@ -541,8 +530,8 @@ body {
     bottom: 28px;
     z-index: 30;
     display: inline-flex;
-    gap: 8px;
     align-items: center;
+    justify-content: center;
     min-height: 48px;
     padding: 0 17px;
     color: #fff;
@@ -562,10 +551,6 @@ body {
     background: var(--accent-green);
     box-shadow: 0 12px 28px rgba(47, 128, 98, .28);
     transform: translateY(-2px);
-}
-
-.launcher-icon {
-    font-size: 1rem;
 }
 
 .sr-only {

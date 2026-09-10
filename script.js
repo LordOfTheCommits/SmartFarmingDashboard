@@ -4,7 +4,7 @@ const chartInstances = {};
 const latestSensorReadings = { moisture: null, tankLevel: null, flow: null, timestamp: null };
 const chartDefinitions = {
     moisture: { id: 'moistureChart', label: 'Soil Moisture (%)', color: '#2f8062', start: 'rgba(47, 128, 98, .24)' },
-    uv: { id: 'uvChart', label: 'Water Tank Level', color: '#c58b3b', start: 'rgba(197, 139, 59, .24)' },
+    uv: { id: 'uvChart', label: 'Water Tank Level (%)', color: '#c58b3b', start: 'rgba(197, 139, 59, .24)' },
     flow: { id: 'flowChart', label: 'Water Flow Rate (L/min)', color: '#438ca0', start: 'rgba(67, 140, 160, .24)' }
 };
 
@@ -175,7 +175,7 @@ closeAssistantButton.addEventListener('click', () => {
     openAssistantButton.setAttribute('aria-expanded', 'false');
 });
 
-renderMessage('ai', 'Hello! I am your farming assistant. Ask me about your crops, or attach a plant image and I will help you assess its health.');
+renderMessage('ai', 'Hello! I am your KisaanEdge AI Farming assistant. Ask me about your crops, or attach a plant image and I will help you assess its health.');
 
 imageInput.addEventListener('change', () => {
     const image = imageInput.files[0];
@@ -317,7 +317,7 @@ function requestSensorSuggestion() {
     }
 
     const readingTime = timestamp ? new Date(timestamp).toLocaleString() : 'the latest available time';
-    messageInput.value = `Using the latest sensor readings (soil moisture: ${formatReading(moisture, '%')}, tank level: ${formatReading(tankLevel, 'index')}, water flow: ${formatReading(flow, 'L/min')}, recorded: ${readingTime}), suggest what I should check or do next. Give advice only; do not change any settings or control equipment.`;
+    messageInput.value = `Using the latest sensor readings (soil moisture: ${formatReading(moisture, '%')}, tank level: ${formatReading(tankLevel, '%')}, water flow: ${formatReading(flow, 'L/min')}, recorded: ${readingTime}), suggest what I should check or do next. Give advice only; do not change any settings or control equipment.`;
     composer.requestSubmit();
 }
 
