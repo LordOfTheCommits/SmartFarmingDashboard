@@ -16,9 +16,12 @@ window.addEventListener('load', async () => {
     try {
         await window.Clerk.load({ ui: { ClerkUI: window.__internal_ClerkUICtor } });
 
-        // If the user is already signed in, take them to the exact GitHub Pages folder
+        // BULLETPROOF ROUTING: Automatically detects your exact live or local link
+        // It takes your current URL, removes "auth.html", and replaces it with "index.html"
+        const dashboardUrl = window.location.href.split('auth.html')[0] + 'index.html';
+
         if (window.Clerk.user) {
-            window.location.replace('/SmartFarmingDashboard/index.html');
+            window.location.replace(dashboardUrl);
             return;
         }
 
@@ -26,9 +29,8 @@ window.addEventListener('load', async () => {
 
         const options = {
             routing: 'hash',
-            // Update these two lines to include your repository name
-            fallbackRedirectUrl: '/SmartFarmingDashboard/index.html',
-            forceRedirectUrl: '/SmartFarmingDashboard/index.html',
+            fallbackRedirectUrl: dashboardUrl,
+            forceRedirectUrl: dashboardUrl,
             appearance: {
                 variables: {
                     colorPrimary: '#2f8062',
