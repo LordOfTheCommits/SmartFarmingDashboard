@@ -40,10 +40,11 @@
                 <span class="language-icon" aria-hidden="true">文</span>
                 <span id="languageToggleLabel">हिंदी</span>
             </button>
+            <button id="sign-out-btn" class="premium-btn sign-out-btn" type="button">Sign out</button>
             <!-- ADDED: The container for the User Profile Picture & Logout button -->
             <div id="auth-controls" class="auth-controls" aria-label="Account controls">
-                <a class="auth-link auth-link-secondary" href="auth.html">Sign in</a>
-                <a class="auth-link auth-link-primary" href="auth.html?mode=sign-up">Sign up</a>
+                <span class="auth-loading" style="margin-left: 15px; font-size: 14px; color: #708178;">Loading
+                    account...</span>
             </div>
         </div>
 
@@ -164,13 +165,24 @@
     <!-- ADDED: Authentication & Protection Handler with Smart Routing -->
     <script>
         window.addEventListener('load', async () => {
+            const signOutButton = document.getElementById('sign-out-btn');
+            const isGitHubPages = window.location.hostname.includes('github.io');
+            const authUrl = isGitHubPages ? '/SmartFarmingDashboard/auth.html' : 'auth.html';
+
+            signOutButton?.addEventListener('click', async () => {
+                signOutButton.disabled = true;
+                try {
+                    if (window.Clerk) await window.Clerk.signOut();
+                } finally {
+                    window.location.replace(authUrl);
+                }
+            });
+
             if (!window.Clerk) return;
             await window.Clerk.load();
 
             if (!window.Clerk.user) {
                 // Not signed in: smart routing to login
-                const isGitHubPages = window.location.hostname.includes('github.io');
-                const authUrl = isGitHubPages ? '/SmartFarmingDashboard/auth.html' : 'auth.html';
                 window.location.replace(authUrl);
             } else {
                 // Signed in: mount profile/logout button

@@ -1,9 +1,44 @@
-function getAuthMode() {
-    return new URLSearchParams(window.location.search).get('mode') === 'sign-up' ? 'sign-up' : 'sign-in';
-}
+function renderAuth() {
+    const mount = document.getElementById('auth-mount');
+    if (!window.Clerk) return;
 
-const authMode = getAuthMode();
-document.body.classList.add(`auth-mode-${authMode}`);
+    // Check if the URL hash or query parameter asks for sign-up
+    const hash = window.location.hash;
+    const isSignUp = hash.includes('sign-up') || new URLSearchParams(window.location.search).get('mode') === 'sign-up';
+
+    mount.replaceChildren();
+
+    const dashboardUrl = window.location.href.split('auth.html')[0] + 'index.html';
+
+    const options = {
+        routing: 'hash',
+        fallbackRedirectUrl: dashboardUrl,
+        forceRedirectUrl: dashboardUrl,
+        afterSignUpUrl: dashboardUrl,
+        afterSignInUrl: dashboardUrl,
+        redirectUrl: dashboardUrl,
+        appearance: {
+            variables: {
+                colorPrimary: '#2f8062',
+                colorText: '#18352b',
+                colorTextSecondary: '#708178',
+                colorBackground: '#ffffff',
+                colorInputBackground: '#f7faf6',
+                colorInputText: '#18352b',
+                borderRadius: '10px',
+                fontFamily: 'DM Sans, sans-serif'
+            }
+        }
+    };
+
+    if (isSignUp) {
+        window.Clerk.mountSignUp(mount, options);
+        document.title = 'Sign up | Kisaan Edge';
+    } else {
+        window.Clerk.mountSignIn(mount, options);
+        document.title = 'Sign in | Kisaan Edge';
+    }
+}
 
 window.addEventListener('load', async () => {
     const mount = document.getElementById('auth-mount');
@@ -16,7 +51,6 @@ window.addEventListener('load', async () => {
     try {
         await window.Clerk.load({ ui: { ClerkUI: window.__internal_ClerkUICtor } });
 
-        // Grab the exact URL path you are on right now
         const dashboardUrl = window.location.href.split('auth.html')[0] + 'index.html';
 
         if (window.Clerk.user) {
@@ -24,36 +58,11 @@ window.addEventListener('load', async () => {
             return;
         }
 
-        mount.replaceChildren();
+        renderAuth();
 
-        const options = {
-            routing: 'hash',
-            // Aggressive Redirects: Forces Clerk's backend to respect your GitHub Pages folder
-            fallbackRedirectUrl: dashboardUrl,
-            forceRedirectUrl: dashboardUrl,
-            afterSignUpUrl: dashboardUrl,
-            afterSignInUrl: dashboardUrl,
-            redirectUrl: dashboardUrl,
-            appearance: {
-                variables: {
-                    colorPrimary: '#2f8062',
-                    colorText: '#18352b',
-                    colorTextSecondary: '#708178',
-                    colorBackground: '#ffffff',
-                    colorInputBackground: '#f7faf6',
-                    colorInputText: '#18352b',
-                    borderRadius: '10px',
-                    fontFamily: 'DM Sans, sans-serif'
-                }
-            }
-        };
+        // Listen for internal clicks (like clicking "Sign up" inside the widget)
+        window.addEventListener('hashchange', renderAuth);
 
-        if (authMode === 'sign-up') {
-            window.Clerk.mountSignUp(mount, options);
-            document.title = 'Sign up | Kisaan Edge';
-        } else {
-            window.Clerk.mountSignIn(mount, options);
-        }
     } catch (error) {
         console.error('Clerk authentication page failed:', error);
         mount.innerHTML = '<p class="auth-status auth-error">Secure sign-in is unavailable. Please refresh and try again.</p>';
