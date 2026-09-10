@@ -230,9 +230,11 @@ async function handleSend(event) {
         if (!responseText) throw new Error('The assistant returned an empty response.');
         chatHistory.push({ role: 'model', parts: [{ text: responseText }] });
         typingMessage.remove();
+        assistantPanel.classList.add('has-response');
         renderMessage('ai', responseText, null, true);
     } catch (error) {
         typingMessage.remove();
+        assistantPanel.classList.add('has-response');
         renderMessage('ai', `I couldn't complete that request. ${error.message}`);
     } finally {
         isSending = false;
