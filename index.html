@@ -60,7 +60,7 @@
                 </div>
                 <div class="chart-container">
                     <div class="empty-state"><span class="empty-icon">~</span><strong>Waiting for sensor
-                            data...</strong><span>UV readings will appear here.</span></div>
+                            data...</strong><span>Tank level readings will appear here.</span></div>
                     <canvas id="uvChart"></canvas>
                 </div>
             </article>
@@ -89,6 +89,8 @@
                 </div>
                 <div class="assistant-actions">
                     <span class="assistant-mark" aria-hidden="true">✦</span>
+                    <button id="sensor-suggestion" class="sensor-suggestion" type="button"
+                        title="Ask for advice using the latest sensor readings">Sensor advice</button>
                     <button id="close-assistant" class="assistant-close" type="button"
                         aria-label="Close farming assistant">&times;</button>
                 </div>

@@ -702,3 +702,21 @@ body {
         padding-inline: 14px;
     }
 }
+
+.sensor-suggestion {
+    min-height: 30px;
+    padding: 6px 10px;
+    color: var(--accent-green);
+    background: #edf7ef;
+    border: 1px solid #cfe5d2;
+    border-radius: 8px;
+    font: inherit;
+    font-size: .72rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.sensor-suggestion:hover,
+.sensor-suggestion:focus-visible {
+    background: #dff0e2;
+}

@@ -1,6 +1,7 @@
 const channelID = '3481475';
 const readAPIKey = 'ZCNLL80EZCDMJMQ7';
 const chartInstances = {};
+const latestSensorReadings = { moisture: null, tankLevel: null, flow: null, timestamp: null };
 const chartDefinitions = {
     moisture: { id: 'moistureChart', label: 'Soil Moisture (%)', color: '#2f8062', start: 'rgba(47, 128, 98, .24)' },
     uv: { id: 'uvChart', label: 'Water Tank Level', color: '#c58b3b', start: 'rgba(197, 139, 59, .24)' },
@@ -105,6 +106,11 @@ async function fetchLiveGraph() {
         Object.entries({ moisture: 'field1', uv: 'field2', flow: 'field3' }).forEach(([key, field]) => {
             const values = feeds.map(feed => Number(feed[field])).filter(Number.isFinite);
             if (values.length === 0) return;
+            const latestValue = Number(feeds[feeds.length - 1][field]);
+            if (key === 'moisture') latestSensorReadings.moisture = latestValue;
+            if (key === 'uv') latestSensorReadings.tankLevel = latestValue;
+            if (key === 'flow') latestSensorReadings.flow = latestValue;
+            latestSensorReadings.timestamp = feeds[feeds.length - 1].created_at;
             if (!chartInstances[key]) createChart(key, timeLabels, values);
             else { chartInstances[key].data.labels = timeLabels; chartInstances[key].data.datasets[0].data = values; chartInstances[key].update(); }
         });
@@ -128,7 +134,7 @@ const part2 = "wXOn-zhj2LFMIg7g";
 const part3 = "puW9PDEhHtREJcv7CLWEjIQrw";
 const API_KEY = `${part1}${part2}${part3}`;
 const API_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${API_KEY}`;
-const SYSTEM_INSTRUCTION = "You are an expert agricultural AI assistant integrated into a farming dashboard. Answer the user's questions about farming, crops, or diseases. If an image is provided, analyze the plant leaf for diseases, causes, and treatments. Keep responses formatting clean with HTML tags like <b> or <br> for readability.";
+const SYSTEM_INSTRUCTION = "You are an expert agricultural AI assistant integrated into a farming dashboard. Answer the user's questions about farming, crops, or diseases. If an image is provided, analyze the plant leaf for diseases, causes, and treatments. When sensor readings are provided, use them to give practical suggestions and clearly mention uncertainty. You are read-only: never claim to change settings, start irrigation, control equipment, or perform an action. Keep responses formatting clean with HTML tags like <b> or <br> for readability.";
 const chatHistory = [];
 const composer = document.getElementById('composer');
 const imageInput = document.getElementById('image-input');
@@ -141,10 +147,13 @@ const removeAttachmentButton = document.getElementById('remove-attachment');
 const assistantPanel = document.querySelector('.assistant-panel');
 const openAssistantButton = document.getElementById('open-assistant');
 const closeAssistantButton = document.getElementById('close-assistant');
+const sensorSuggestionButton = document.getElementById('sensor-suggestion');
 
 let selectedImage = null;
 let selectedImageUrl = null;
 let isSending = false;
+
+sensorSuggestionButton.addEventListener('click', requestSensorSuggestion);
 
 openAssistantButton.addEventListener('click', () => {
     assistantPanel.classList.add('is-open');
@@ -289,4 +298,20 @@ function readImageAsDataUrl(image) {
         reader.addEventListener('error', () => reject(new Error('The selected image could not be read.')));
         reader.readAsDataURL(image);
     });
+}
+
+function requestSensorSuggestion() {
+    const { moisture, tankLevel, flow, timestamp } = latestSensorReadings;
+    if (![moisture, tankLevel, flow].some(Number.isFinite)) {
+        renderMessage('ai', 'I do not have a sensor reading yet. Refresh the dashboard and try again.');
+        return;
+    }
+
+    const readingTime = timestamp ? new Date(timestamp).toLocaleString() : 'the latest available time';
+    messageInput.value = `Using the latest sensor readings (soil moisture: ${formatReading(moisture, '%')}, tank level: ${formatReading(tankLevel, 'index')}, water flow: ${formatReading(flow, 'L/min')}, recorded: ${readingTime}), suggest what I should check or do next. Give advice only; do not change any settings or control equipment.`;
+    composer.requestSubmit();
+}
+
+function formatReading(value, unit) {
+    return Number.isFinite(value) ? `${value} ${unit}` : 'unavailable';
 }
