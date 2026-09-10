@@ -79,7 +79,47 @@
                 </div>
             </article>
         </section>
+
+        <section class="assistant-panel" aria-labelledby="assistant-title">
+            <div class="assistant-heading">
+                <div>
+                    <p class="eyebrow">Fieldwise intelligence</p>
+                    <h2 id="assistant-title">Smart Farming Assistant</h2>
+                    <p>Ask about crops, soil, weather, or plant health.</p>
+                </div>
+                <div class="assistant-actions">
+                    <span class="assistant-mark" aria-hidden="true">✦</span>
+                    <button id="close-assistant" class="assistant-close" type="button"
+                        aria-label="Close farming assistant">&times;</button>
+                </div>
+            </div>
+
+            <div id="message-history" class="message-history" aria-live="polite" aria-label="Assistant conversation">
+            </div>
+
+            <form id="composer" class="composer">
+                <div id="attachment-preview" class="attachment-preview" aria-label="Selected image preview">
+                    <img id="attachment-thumbnail" src="" alt="Selected plant image">
+                    <button id="remove-attachment" class="remove-attachment" type="button"
+                        aria-label="Remove attached image">&times;</button>
+                </div>
+                <div class="input-bar">
+                    <label class="icon-button" for="image-input" title="Attach an image"
+                        aria-label="Attach an image">&#128206;</label>
+                    <input id="image-input" class="sr-only" type="file" accept="image/*">
+                    <input id="message-input" type="text" placeholder="Ask a question about your farm..."
+                        autocomplete="off" aria-label="Message">
+                    <button id="send-button" class="send-button" type="submit">Send</button>
+                </div>
+            </form>
+        </section>
     </main>
+
+    <button id="open-assistant" class="assistant-launcher" type="button" aria-label="Open farming assistant"
+        aria-expanded="false">
+        <span class="launcher-icon" aria-hidden="true">✦</span>
+        <span class="launcher-label">Ask Fieldwise</span>
+    </button>
 
     <script src="script.js"></script>
 </body>

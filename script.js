@@ -121,3 +121,169 @@ document.getElementById('refreshBtn').addEventListener('click', fetchLiveGraph);
 document.getElementById('readingCount').addEventListener('change', fetchLiveGraph);
 fetchLiveGraph();
 setInterval(fetchLiveGraph, 5000);
+
+// AI farming assistant
+const API_KEY = "AQ.Ab8RN6Jhw7HXT5nMgCLRejdvrbwGAAce-Ifu0YZ5LFylkd65SQ";
+const API_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${API_KEY}`;
+const SYSTEM_INSTRUCTION = "You are an expert agricultural AI assistant integrated into a farming dashboard. Answer the user's questions about farming, crops, or diseases. If an image is provided, analyze the plant leaf for diseases, causes, and treatments. Keep responses formatting clean with HTML tags like <b> or <br> for readability.";
+const chatHistory = [];
+const composer = document.getElementById('composer');
+const imageInput = document.getElementById('image-input');
+const messageInput = document.getElementById('message-input');
+const sendButton = document.getElementById('send-button');
+const messageHistory = document.getElementById('message-history');
+const attachmentPreview = document.getElementById('attachment-preview');
+const attachmentThumbnail = document.getElementById('attachment-thumbnail');
+const removeAttachmentButton = document.getElementById('remove-attachment');
+const assistantPanel = document.querySelector('.assistant-panel');
+const openAssistantButton = document.getElementById('open-assistant');
+const closeAssistantButton = document.getElementById('close-assistant');
+
+let selectedImage = null;
+let selectedImageUrl = null;
+let isSending = false;
+
+openAssistantButton.addEventListener('click', () => {
+    assistantPanel.classList.add('is-open');
+    openAssistantButton.setAttribute('aria-expanded', 'true');
+    messageInput.focus();
+});
+
+closeAssistantButton.addEventListener('click', () => {
+    assistantPanel.classList.remove('is-open');
+    openAssistantButton.setAttribute('aria-expanded', 'false');
+});
+
+renderMessage('ai', 'Hello! I am your farming assistant. Ask me about your crops, or attach a plant image and I will help you assess its health.');
+
+imageInput.addEventListener('change', () => {
+    const image = imageInput.files[0];
+    if (!image) return;
+    selectedImage = image;
+    selectedImageUrl = URL.createObjectURL(image);
+    attachmentThumbnail.src = selectedImageUrl;
+    attachmentPreview.classList.add('visible');
+    messageInput.focus();
+});
+
+removeAttachmentButton.addEventListener('click', clearAttachment);
+composer.addEventListener('submit', handleSend);
+messageInput.addEventListener('keydown', event => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        composer.requestSubmit();
+    }
+});
+
+async function handleSend(event) {
+    event.preventDefault();
+    const text = messageInput.value.trim();
+    const image = selectedImage;
+    const imageUrl = selectedImageUrl;
+    if (isSending || (!text && !image)) return;
+
+    isSending = true;
+    sendButton.disabled = true;
+    imageInput.disabled = true;
+    renderMessage('user', text, imageUrl);
+    messageInput.value = '';
+    clearAttachment();
+    const typingMessage = renderTypingIndicator();
+
+    try {
+        const parts = [];
+        if (text) parts.push({ text });
+        if (image) {
+            const imageDataUrl = await readImageAsDataUrl(image);
+            parts.push({ inline_data: { mime_type: image.type, data: imageDataUrl.split(',')[1] } });
+        }
+        chatHistory.push({ role: 'user', parts });
+        const response = await fetch(API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] }, contents: chatHistory })
+        });
+        if (!response.ok) throw new Error(`The assistant request failed (${response.status}).`);
+        const data = await response.json();
+        const responseText = data.candidates?.[0]?.content?.parts?.map(part => part.text).filter(Boolean).join('<br>');
+        if (!responseText) throw new Error('The assistant returned an empty response.');
+        chatHistory.push({ role: 'model', parts: [{ text: responseText }] });
+        typingMessage.remove();
+        renderMessage('ai', responseText, null, true);
+    } catch (error) {
+        typingMessage.remove();
+        renderMessage('ai', `I couldn't complete that request. ${error.message}`);
+    } finally {
+        isSending = false;
+        sendButton.disabled = false;
+        imageInput.disabled = false;
+        messageInput.focus();
+    }
+}
+
+function renderMessage(role, text, imageUrl, isHtml = false) {
+    const message = document.createElement('article');
+    message.className = `message ${role}`;
+    const content = document.createElement('div');
+    content.className = 'message-content';
+    const bubble = document.createElement('div');
+    bubble.className = 'message-bubble';
+    if (imageUrl) {
+        const image = document.createElement('img');
+        image.className = 'message-image';
+        image.src = imageUrl;
+        image.alt = 'Attached plant image';
+        bubble.append(image);
+    }
+    if (text) {
+        if (isHtml) bubble.insertAdjacentHTML('beforeend', sanitizeResponse(text));
+        else bubble.append(document.createTextNode(text));
+    }
+    content.append(bubble);
+    message.append(content);
+    messageHistory.append(message);
+    scrollToLatest();
+    return message;
+}
+
+function renderTypingIndicator() {
+    const message = document.createElement('article');
+    message.className = 'message ai';
+    message.innerHTML = '<div class="message-content"><div class="message-bubble typing-dots" aria-label="AI is typing"><span></span><span></span><span></span></div></div>';
+    messageHistory.append(message);
+    scrollToLatest();
+    return message;
+}
+
+function sanitizeResponse(responseText) {
+    const template = document.createElement('template');
+    template.innerHTML = responseText.replace(/\n/g, '<br>');
+    const allowedTags = new Set(['B', 'STRONG', 'I', 'EM', 'BR', 'P', 'UL', 'OL', 'LI']);
+    template.content.querySelectorAll('*').forEach(element => {
+        if (!allowedTags.has(element.tagName)) element.replaceWith(...element.childNodes);
+        else[...element.attributes].forEach(attribute => element.removeAttribute(attribute.name));
+    });
+    return template.innerHTML;
+}
+
+function clearAttachment() {
+    if (selectedImageUrl) URL.revokeObjectURL(selectedImageUrl);
+    selectedImage = null;
+    selectedImageUrl = null;
+    attachmentThumbnail.removeAttribute('src');
+    attachmentPreview.classList.remove('visible');
+    imageInput.value = '';
+}
+
+function scrollToLatest() {
+    messageHistory.scrollTop = messageHistory.scrollHeight;
+}
+
+function readImageAsDataUrl(image) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => resolve(reader.result));
+        reader.addEventListener('error', () => reject(new Error('The selected image could not be read.')));
+        reader.readAsDataURL(image);
+    });
+}
